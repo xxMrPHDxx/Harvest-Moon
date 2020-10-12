@@ -1,0 +1,13 @@
+CMakeCache.txt
+CMakeFiles/
+Debug/
+hm
+hm.exe
+Makefile
+Release/
+x64/
+x86/
+*.cmake
+*.sln
+*.vcxproj
+*.vcxproj.filter

@@ -1,0 +1,36 @@
+#ifndef GAME_HPP
+#define GAME_HPP
+
+#include "pch.hpp"
+
+class Game {
+private:
+	sf::RenderWindow* window;
+	sf::Event event;
+public:
+	Game() = delete; // Remove default constructor
+	Game(int width, int height, std::string title){
+		window = new sf::RenderWindow(
+			sf::VideoMode(width, height),
+			title,
+			sf::Style::Close | sf::Style::Titlebar
+		);
+	}
+	virtual ~Game(){ delete window; }
+
+	static void register_class(lua_State*);
+
+	static int create(lua_State*);
+	static int destroy(lua_State*);
+
+	static int is_open(lua_State*);
+	static int is_event_closed(lua_State*);
+
+	static int poll_event(lua_State*);
+	static int close(lua_State*);
+	static int draw(lua_State*);
+	static int display(lua_State*);
+	static Game* get_instance(lua_State*);
+};
+
+#endif
