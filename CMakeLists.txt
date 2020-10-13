@@ -1,14 +1,20 @@
 cmake_minimum_required( VERSION 3.10 )
 project( harvest_moon )
 
-set( SFML_HOME_DIR ../SFML-2.5.1 )
-set( LUA_HOME_DIR ../lua-5.4.1 )
+if( DEFINED ENV{SFML_HOME_DIR} AND DEFINED ENV{LUA_HOME_DIR} )
+	file( GLOB_RECURSE SRCS src/*.cpp )
 
-file( GLOB_RECURSE SRCS src/*.cpp )
+	include_directories( PUBLIC $ENV{SFML_HOME_DIR}/include PUBLIC $ENV{LUA_HOME_DIR}/include )
+	link_directories( $ENV{SFML_HOME_DIR}/lib $ENV{LUA_HOME_DIR}/lib ) 
 
-include_directories( PUBLIC ${SFML_HOME_DIR}/include PUBLIC ${LUA_HOME_DIR}/include )
-link_directories( ${SFML_HOME_DIR}/lib ${LUA_HOME_DIR}/lib ) 
-
-add_executable( hm ${SRCS} )
-target_precompile_headers( hm PUBLIC src/pch.hpp )
-target_link_libraries( hm sfml-graphics sfml-window sfml-system lua )
+	add_executable( hm ${SRCS} )
+	target_precompile_headers( hm PUBLIC src/pch.hpp )
+	target_link_libraries( hm
+		sfml-graphics
+		sfml-window 
+		sfml-system
+		lua
+	)
+else ()
+	message( FATAL_ERROR "Make sure to set 'SFML_HOME_DIR' and 'LUA_HOME_DIR' as environment variables!" )
+endif ()
