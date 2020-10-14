@@ -1,8 +1,13 @@
 game = Game:new(640, 480, 'Shit!')
+
 jack = SpriteSheet:new('Sheets/6791.png')
 jack:define('jack_idle1', 29, 122, 16, 24);
 jack:define('jack_idle2', 46, 122, 16, 24);
 jack:define('jack_idle3', 63, 122, 16, 24);
+
+jack_walk = Animation:new(jack, 180)
+for i=1,3 do jack_walk:add('jack_idle'..i) end
+jack_walk:add('jack_idle2')
 
 while game:is_open() do
 	while game:poll_event() do
@@ -11,13 +16,14 @@ while game:is_open() do
 	
 	game:clear()
 
-	local time = game:get_time()
+	-- local time = game:get_time()
 	
-	local idx = math.floor(time/180) % 4 + 1
-	if idx == 4 then idx = 2 end
-	game:draw(jack:get('jack_idle'..idx))
+	jack_walk:update()
+	game:draw(jack_walk:get())
 	
 	game:display()
 end
 
+jack_walk:destroy()
+jack:destroy()
 game:destroy()

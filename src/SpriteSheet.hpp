@@ -16,6 +16,11 @@ public:
 		for(auto& pair : sprites)
 			delete pair.second;
 	}
+	sf::Sprite& operator [](std::string key){
+		if(!sprites.count(key))
+			throw std::invalid_argument("Sprite with that name doesn't exists!");
+		return *sprites[key];
+	}
 
 	static void register_class(lua_State*);
 

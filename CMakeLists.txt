@@ -6,6 +6,7 @@ if( DEFINED ENV{SFML_HOME_DIR} AND DEFINED ENV{LUA_HOME_DIR} )
 	set( SRCS
 		src/Game.cpp
 		src/SpriteSheet.cpp
+		src/Animation.cpp
 		src/main.cpp
 	)
 
