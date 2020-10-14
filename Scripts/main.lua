@@ -1,6 +1,8 @@
 game = Game:new(640, 480, 'Shit!')
 jack = SpriteSheet:new('Sheets/6791.png')
-jack:define('test', 0, 0, 16, 16);
+jack:define('jack_idle1', 29, 122, 16, 24);
+jack:define('jack_idle2', 46, 122, 16, 24);
+jack:define('jack_idle3', 63, 122, 16, 24);
 
 while game:is_open() do
 	while game:poll_event() do
@@ -8,7 +10,13 @@ while game:is_open() do
 	end
 	
 	game:clear()
-	game:draw(jack:get('test'))
+
+	local time = game:get_time()
+	
+	local idx = math.floor(time/180) % 4 + 1
+	if idx == 4 then idx = 2 end
+	game:draw(jack:get('jack_idle'..idx))
+	
 	game:display()
 end
 

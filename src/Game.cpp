@@ -31,6 +31,8 @@ int Game::create(lua_State* L){
 		{ "destroy", destroy },
 		{ "is_open", is_open },
 		{ "is_event_closed", is_event_closed },
+		{ "get_time", get_time },
+		{ "get_dt", get_dt },
 		{ "poll_event", poll_event },
 		{ "close", close },
 		{ "clear", clear },
@@ -71,6 +73,18 @@ int Game::is_event_closed(lua_State* L){
 	return 1;
 }
 
+int Game::get_time(lua_State* L){
+	Game& g = *get_instance(L);
+	lua_pushnumber(L, g.time);
+	return 1;
+}
+
+int Game::get_dt(lua_State* L){
+	Game& g = *get_instance(L);
+	lua_pushnumber(L, g.dt);
+	return 1;
+}
+
 int Game::poll_event(lua_State* L){
 	Game& g = *get_instance(L);
 	lua_pushboolean(L, g.window->pollEvent(g.event));
@@ -85,6 +99,8 @@ int Game::close(lua_State* L){
 
 int Game::clear(lua_State* L){
 	Game& g = *get_instance(L);
+	g.time = g.clock_global.getElapsedTime().asMilliseconds();
+	g.dt = g.clock_dt.restart().asMilliseconds();
 	g.window->clear();
 	return 1;
 }

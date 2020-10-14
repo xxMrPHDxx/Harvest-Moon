@@ -7,6 +7,8 @@ class Game {
 private:
 	sf::RenderWindow* window;
 	sf::Event event;
+	sf::Clock clock_global, clock_dt;
+	float time, dt;
 public:
 	Game() = delete; // Remove default constructor
 	Game(int width, int height, std::string title){
@@ -25,6 +27,8 @@ public:
 
 	static int is_open(lua_State*);
 	static int is_event_closed(lua_State*);
+	static int get_time(lua_State*);
+	static int get_dt(lua_State*);
 
 	static int poll_event(lua_State*);
 	static int close(lua_State*);
