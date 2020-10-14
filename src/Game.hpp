@@ -28,6 +28,7 @@ public:
 
 	static int poll_event(lua_State*);
 	static int close(lua_State*);
+	static int clear(lua_State*);
 	static int draw(lua_State*);
 	static int display(lua_State*);
 	static Game* get_instance(lua_State*);

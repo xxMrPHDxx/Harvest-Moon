@@ -33,6 +33,7 @@ int Game::create(lua_State* L){
 		{ "is_event_closed", is_event_closed },
 		{ "poll_event", poll_event },
 		{ "close", close },
+		{ "clear", clear },
 		{ "draw", draw },
 		{ "display", display }
 	};
@@ -82,11 +83,16 @@ int Game::close(lua_State* L){
 	return 1;
 }
 
+int Game::clear(lua_State* L){
+	Game& g = *get_instance(L);
+	g.window->clear();
+	return 1;
+}
+
 int Game::draw(lua_State* L){
 	// Check for sprite userdata
-	if(lua_gettop(L) == 2 && lua_isuserdata(L, -1)){
-		return 1;
-	}
+	if(lua_gettop(L) != 2 || !lua_isuserdata(L, -1))
+		throw luaL_error(L, "Game:draw(...) expects sf::Sprite userdata!");
 	// Get the sprite ptr and pop the stack
 	sf::Sprite* spr = (sf::Sprite*) lua_touserdata(L, -1);
 	lua_pop(L, 1);

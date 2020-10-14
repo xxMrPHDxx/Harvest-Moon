@@ -1,6 +1,9 @@
 #include <iostream>
 
 #include "Game.hpp"
+#include "SpriteSheet.hpp"
+
+#define REGISTER(cls) cls::register_class(L)
 
 int main(){
 	// Create a new state
@@ -10,7 +13,9 @@ int main(){
 	luaL_openlibs(L);
 
 	// Register all classes
-	Game::register_class(L);
+	REGISTER(Game);
+	// REGISTER(SpriteSheet);
+	SpriteSheet::register_class(L);
 
 	// Load a main script
 	if(luaL_dofile(L, "Scripts/main.lua")){
