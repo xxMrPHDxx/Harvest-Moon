@@ -29,15 +29,16 @@ int Game::create(lua_State* L){
 	// Set all the instance methods
 	luaL_Reg methods[] = {
 		{ "destroy", destroy },
-		{ "is_open", is_open },
-		{ "is_event_closed", is_event_closed },
 		{ "get_time", get_time },
 		{ "get_dt", get_dt },
-		{ "poll_event", poll_event },
+		{ "is_open", is_open },
+		{ "is_event_closed", is_event_closed },
 		{ "close", close },
 		{ "clear", clear },
 		{ "draw", draw },
-		{ "display", display }
+		{ "display", display },
+		{ "poll_event", poll_event },
+		{ "set_scale", set_scale }
 	};
 	for(luaL_Reg& reg : methods){
 		lua_pushcfunction(L, reg.func);
@@ -61,18 +62,6 @@ int Game::destroy(lua_State* L){
 	return 1;
 }
 
-int Game::is_open(lua_State* L){
-	Game& g = *get_instance(L);
-	lua_pushboolean(L, g.window->isOpen());
-	return 1;
-}
-
-int Game::is_event_closed(lua_State* L){
-	Game& g = *get_instance(L);
-	lua_pushboolean(L, g.event.type == sf::Event::Closed);
-	return 1;
-}
-
 int Game::get_time(lua_State* L){
 	Game& g = *get_instance(L);
 	lua_pushnumber(L, g.time);
@@ -85,9 +74,15 @@ int Game::get_dt(lua_State* L){
 	return 1;
 }
 
-int Game::poll_event(lua_State* L){
+int Game::is_open(lua_State* L){
 	Game& g = *get_instance(L);
-	lua_pushboolean(L, g.window->pollEvent(g.event));
+	lua_pushboolean(L, g.window->isOpen());
+	return 1;
+}
+
+int Game::is_event_closed(lua_State* L){
+	Game& g = *get_instance(L);
+	lua_pushboolean(L, g.event.type == sf::Event::Closed);
 	return 1;
 }
 
@@ -114,6 +109,8 @@ int Game::draw(lua_State* L){
 	lua_pop(L, 1);
 	// Get the game instance
 	Game& g = *get_instance(L);
+	// Scale the sprite
+	spr->setScale(g.scl.x, g.scl.y);
 	// Draw the sprite
 	g.window->draw(*spr);
 	return 1;
@@ -122,6 +119,41 @@ int Game::draw(lua_State* L){
 int Game::display(lua_State* L){
 	Game& g = *get_instance(L);
 	g.window->display();
+	return 1;
+}
+
+int Game::poll_event(lua_State* L){
+	Game& g = *get_instance(L);
+	lua_pushboolean(L, g.window->pollEvent(g.event));
+	return 1;
+}
+
+int Game::set_scale(lua_State* L){
+	// Check for arguments (sx, sy=sx)
+	float sx = 1.f, sy = 1.f;
+	int top = static_cast<int>(lua_gettop(L));
+	switch(top){
+		case 3: {
+			if(!lua_isnumber(L, -1))
+				throw luaL_error(L, "Argument 2 is not a number!");
+			sx = sy = static_cast<float>(lua_tonumber(L, -1));
+			lua_pop(L, 1);
+		}
+		case 2: {
+			if(!lua_isnumber(L, -1))
+				throw luaL_error(L, "Argument 1 is not a number!");
+			sx = static_cast<float>(lua_tonumber(L, -1));
+			lua_pop(L, 1);
+		}
+		case 1: break;
+		default:
+			throw luaL_error(L, "Game:scale(...) expects 0, 1 or 2 arguments only!");
+	}
+	// Get the Game instance
+	Game& g = *get_instance(L);
+	// Scale it up
+	g.scl.x = sx;
+	g.scl.y = sy;
 	return 1;
 }
 

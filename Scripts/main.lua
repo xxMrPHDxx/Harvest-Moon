@@ -1,4 +1,5 @@
-game = Game:new(640, 480, 'Shit!')
+game = Game:new(640, 480, 'Harvest Moon!')
+game:set_scale(3, 3)
 
 jack = SpriteSheet:new('Sheets/6791.png')
 jack:define('jack_idle1', 29, 122, 16, 24);
@@ -16,9 +17,7 @@ while game:is_open() do
 	
 	game:clear()
 
-	-- local time = game:get_time()
-	
-	jack_walk:update()
+	jack_walk:update()	
 	game:draw(jack_walk:get())
 	
 	game:display()
