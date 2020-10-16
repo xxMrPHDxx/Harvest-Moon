@@ -12,6 +12,8 @@ jack:define('jack_walk_up1', 31, 171, 16, 25);
 jack:define('jack_walk_up2', 48, 171, 16, 25);
 jack:define('jack_walk_up3', 65, 171, 16, 25);
 
+am = AssetManager:new()
+
 local create_walk = function(ss, name)
 	local obj = Animation:new(jack, 180)
 	for i=1,3 do obj:add(name..i) end
@@ -23,6 +25,9 @@ jack_walk_down = create_walk(jack, 'jack_walk_down')
 jack_walk_left = create_walk(jack, 'jack_walk_left')
 jack_walk_up   = create_walk(jack, 'jack_walk_up')
 
+am:set_table('jwd', jack_walk_down)
+am:set_table('jwl', jack_walk_left)
+am:set_table('jwu', jack_walk_up)
 
 while game:is_open() do
 	while game:poll_event() do
@@ -31,8 +36,9 @@ while game:is_open() do
 	
 	game:clear()
 
-	jack_walk_left:update()	
-	game:draw(jack_walk_left:get())
+	anim = am:get_table('jwl')
+	anim:update()	
+	game:draw(anim:get())
 	
 	game:display()
 end

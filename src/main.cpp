@@ -3,6 +3,7 @@
 #include "Game.hpp"
 #include "SpriteSheet.hpp"
 #include "Animation.hpp"
+#include "AssetManager.hpp"
 
 #define REGISTER(cls) cls::register_class(L)
 
@@ -17,6 +18,7 @@ int main(){
 	REGISTER(Game);
 	REGISTER(SpriteSheet);
 	REGISTER(Animation);
+	REGISTER(AssetManager);
 
 	// Load a main script
 	if(luaL_dofile(L, "Scripts/main.lua")){
